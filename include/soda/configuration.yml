@@ -1,0 +1,8 @@
+data_source pg_datasource:
+  type: postgres
+  username: ${ETL_DATABASE_USERNAME}
+  password: ${ETL_DATABASE_PASSWORD}
+  host: ${POSTGRES_CONN_HOST}
+  port: ${POSTGRES_CONN_PORT}
+  database: ${ETL_DATABASE_NAME}
+  schema: ${schema}

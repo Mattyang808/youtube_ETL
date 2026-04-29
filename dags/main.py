@@ -1,4 +1,5 @@
 from airflow import DAG
+from datwarehouse.dwh import core_table, staging_table
 import pendulum
 from datetime import timedelta, datetime
 from api.video_stats import get_channel_id, get_video_ids, get_video_details, save_to_json
@@ -36,3 +37,30 @@ with DAG(
 
     #define dependencies
     playlist_id >> video_ids >> extract_data >> save_to_json_task
+
+
+with DAG(
+
+    dag_id='update_db',
+
+    default_args=default_args,
+
+    description='A DAG to extract YouTube video data and update the database',
+
+    schedule='0 15 * * *', # Run daily at 15:00 (3 PM) Perth time
+
+    catchup=False,
+
+    ) as dag:
+
+    #define tasks
+
+    update_staging = staging_table()
+
+    update_core = core_table()
+
+    
+
+    #define dependencies
+
+    update_staging >> update_core

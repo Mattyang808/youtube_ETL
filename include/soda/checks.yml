@@ -1,5 +1,5 @@
 # Specify the exact schema path
-checks for core.yt_api:
+checks for yt_api:
   - missing_count("Video_Id") = 0
   - duplicate_count("Video_Id") = 0
 
@@ -7,12 +7,12 @@ checks for core.yt_api:
       name: Check for like_count greater than video_views
       likes_count_greater_than_vid_view query: |
         SELECT COUNT(*) AS count
-        FROM core.yt_api
+        FROM yt_api
         WHERE "Like_Count" > "Video_Views"
 
   - comment_count_greater_than_vid_view = 0:
       name: Check for comment_count greater than video_views
       comment_count_greater_than_vid_view query: |
         SELECT COUNT(*) AS count
-        FROM core.yt_api
+        FROM yt_api
         WHERE "Comment_Count" > "Video_Views"

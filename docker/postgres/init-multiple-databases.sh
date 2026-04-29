@@ -16,13 +16,13 @@ EOSQL
     echo "User '$username' and database '$database' created successfully."
 }
 
-# Create Airflow metadata database and user
-create_user_and_database $METADATA_DATABASE_USER $METADATA_DATABASE_USERNAME $METADATA_DATABASE_PASSWORD
+# Create Airflow metadata database and user (Fixed variable name and order)
+create_user_and_database "$METADATA_DATABASE_USERNAME" "$METADATA_DATABASE_PASSWORD" "$METADATA_DATABASE_NAME"
 
-# Create Celery backend database and user
-create_user_and_database $CELERY_BACKEND_NAME $CELERY_BACKEND_USERNAME $CELERY_BACKEND_PASSWORD
+# Create Celery backend database and user (Fixed order)
+create_user_and_database "$CELERY_BACKEND_USERNAME" "$CELERY_BACKEND_PASSWORD" "$CELERY_BACKEND_NAME"
 
-#ETL database and user
-create_user_and_database $ETL_DATABASE_NAME $ETL_DATABASE_USERNAME $ETL_DATABASE_PASSWORD
+# ETL database and user (Fixed order)
+create_user_and_database "$ETL_DATABASE_USERNAME" "$ETL_DATABASE_PASSWORD" "$ETL_DATABASE_NAME"
 
 echo "All databases and users created successfully."

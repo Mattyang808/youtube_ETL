@@ -1,16 +1,17 @@
 import requests 
 import json
 from airflow.models import Variable
-
+import os
 from datetime import date
-from airflwow.decorators import task
+from airflow.decorators import task
 
-API_KEY = Variable.get("API_KEY")
-CHANNEL_HANDLE = Variable.get("CHANNEL_HANDLE")
+
 maxResults = 50
 
 @task
 def get_channel_id():
+    API_KEY = Variable.get("API_KEY")
+    CHANNEL_HANDLE = Variable.get("CHANNEL_HANDLE")
     try:
         url = f"https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle={CHANNEL_HANDLE}&key={API_KEY}"
 
@@ -36,7 +37,7 @@ def get_channel_id():
 
 @task
 def get_video_ids(playlistId):
-    
+    API_KEY = Variable.get("API_KEY")
     video_ids = []
 
     pagetoken = None
@@ -61,7 +62,9 @@ def get_video_ids(playlistId):
     except requests.exceptions.RequestException as e:
         raise e
 
+@task
 def get_video_details(video_ids):
+    API_KEY = Variable.get("API_KEY")
     extracted_video_details = []
     def batch_list(video_id_lst, batch_size):
         for i in range(0, len(video_id_lst), batch_size):

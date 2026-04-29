@@ -1,3 +1,19 @@
+# Virtual Environments and Python Cache
 venv/
-_pycache__/
+__pycache__/
+*.pyc
+
+# Environment Variables (CRITICAL: Do not upload API keys!)
 .env
+
+# MacOS System Files
+.DS_Store
+
+# Generated Data and Logs
+logs/
+data/
+video.json
+
+# Airflow generates local configs/plugins
+config/
+plugins/

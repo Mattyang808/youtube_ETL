@@ -24,6 +24,8 @@ youtube_ETL/
 ├── docker/                  # Init scripts for PostgreSQL
 ├── include/                 # External dependencies (e.g., Soda configurations)
 │   └── soda/                # Soda data quality checks (checks.yml) & configs
+├── .github/                 # GitHub Actions workflows for CI/CD
+│   └── workflows/           # CI/CD pipeline definition (ci_cd_yt_etl.yaml)
 ├── docker-compose.yaml      # Docker Compose configuration for the Airflow cluster
 ├── dockerfile               # Custom Docker image instructions
 ├── requirements.txt         # Python dependencies
@@ -39,6 +41,17 @@ The workflow is orchestrated using three separate scheduled DAGs, running sequen
 | `produce_json` | Daily at 14:00 | Extracts YouTube channel ID, video IDs, and video statistics, then saves the result as daily JSON files (e.g., `Youtube_data_YYYY-MM-DD.json`). |
 | `update_db` | Daily at 15:00 | Parses the JSON files and performs an Upsert/Load into the PostgreSQL `staging` table, followed by updating the `core` analytical table. |
 | `data_quality` | Daily at 16:00 | Triggers Soda to run automated profiling and data quality checks against both the `staging` and `core` tables. |
+
+## ⚙️ CI/CD Pipeline
+
+The project includes an automated Continuous Integration and Continuous Deployment (CI/CD) pipeline built with **GitHub Actions**.
+
+Whenever code is pushed or a pull request is created on the `main` branch or `feature/*` branches, the pipeline:
+1. Detects which files have changed.
+2. Automatically builds and pushes a new version of the Airflow Docker image to **Docker Hub** if the `Dockerfile` or `requirements.txt` is updated.
+3. Automatically sets up the `docker-compose` environment and runs Pytest unit & integration tests inside the Airflow worker container.
+4. Triggers an End-to-End test by running all three Airflow DAGs (`produce_json`, `update_db`, `data_quality`) to ensure pipeline stability.
+5. Gracefully tears down the testing infrastructure.
 
 ## 🚀 Getting Started
 
